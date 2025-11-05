@@ -448,6 +448,12 @@
                 /* KEEP SAME text shadow as desktop */
                 text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
                 /* REMOVED mobile filter - keep same brightness/contrast as desktop */
+                /* Enhanced mobile touch handling */
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: rgba(255, 255, 255, 0.2);
+                cursor: pointer;
+                user-select: none;
+                -webkit-user-select: none;
             }
         }
 
@@ -997,7 +1003,7 @@
         <div class="shape"></div>
         <div class="shape"></div>
     </div>
-
+    
     <!-- Main Content -->
     <div class="container">
         <div class="content">
@@ -1018,7 +1024,7 @@
 
             <!-- CTA -->
             <div class="cta-container">
-                <a href="#" class="cta-button" onclick="initializeStream()">
+                <a href="javascript:void(0)" class="cta-button" onclick="initializeStream(event)" ontouchstart="initializeStream(event)">
                     <span class="cta-text">Start Streaming</span>
                     <svg class="cta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
@@ -1176,32 +1182,59 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Start ember particles immediately
             initializeEmberParticles();
+            
+            // Add additional mobile touch event handling
+            const ctaButton = document.querySelector('.cta-button');
+            if (ctaButton && isMobileDevice()) {
+                // Add touchstart for immediate feedback on mobile
+                ctaButton.addEventListener('touchstart', function(e) {
+                    this.style.transform = 'scale(0.95)';
+                    this.style.transition = 'transform 0.1s ease';
+                });
+                
+                ctaButton.addEventListener('touchend', function(e) {
+                    setTimeout(() => {
+                        this.style.transform = '';
+                        this.style.transition = '';
+                    }, 150);
+                });
+            }
         });
 
         // Interactive CTA - Mobile Enhanced
-        function initializeStream() {
+        function initializeStream(event) {
+            // Prevent default behavior and event propagation
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            
             const button = document.querySelector('.cta-button');
             if (!button) return;
             
-            // Mobile touch feedback
+            // Mobile touch feedback with better response
             if (isMobileDevice()) {
                 // Add visual feedback for mobile
                 button.style.transform = 'scale(0.95)';
+                button.style.transition = 'transform 0.1s ease';
                 setTimeout(() => {
                     button.style.transform = '';
+                    button.style.transition = '';
                 }, 150);
             } else {
                 // Desktop hover effect
                 button.style.transform = 'scale(0.98)';
+                button.style.transition = 'transform 0.1s ease';
                 setTimeout(() => {
                     button.style.transform = '';
+                    button.style.transition = '';
                 }, 150);
             }
 
-            // Show welcome message
+            // Show welcome message with slight delay for better UX
             setTimeout(() => {
                 showWelcomeMessage();
-            }, 300);
+            }, 200);
         }
 
         function showWelcomeMessage() {
@@ -1215,22 +1248,24 @@
                 transform: translate(-50%, -50%);
                 background: #000000 !important;
                 border-radius: 16px;
-                padding: 48px;
+                padding: ${isMobileDevice() ? '32px' : '48px'};
                 border: 1px solid rgba(255, 255, 255, 0.15) !important;
                 box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
                 text-align: center;
                 max-width: 400px;
                 width: 90%;
-                z-index: 10000;
+                z-index: 2147483647; /* Maximum z-index for mobile compatibility */
                 opacity: 0;
                 transition: all 0.3s ease;
                 -webkit-backface-visibility: hidden;
+                -webkit-transform: translate(-50%, -50%) translateZ(0);
+                transform: translate(-50%, -50%) translateZ(0);
             `;
 
             modal.innerHTML = `
-                <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 16px; color: #ffffff !important; -webkit-font-smoothing: antialiased;">Welcome to RavStream</h2>
-                <p style="color: #9ca3af !important; margin-bottom: 32px; line-height: 1.6; -webkit-font-smoothing: antialiased; font-size: 0.95rem;">Your journey into free IPTV begins now! You'll be redirected to the full streaming platform, but first, please verify you're a real person to prevent system abuse.</p>
-                <button onclick="this.closest('[style*=position: fixed]').remove(); document.body.querySelector('[style*="z-index: 9999"]')?.remove()" style="padding: 12px 24px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4); min-height: 44px; font-size: 1rem; -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);">Continue</button>
+                <h2 style="font-size: ${isMobileDevice() ? '1.3rem' : '1.5rem'}; font-weight: 600; margin-bottom: 16px; color: #ffffff !important; -webkit-font-smoothing: antialiased;">Welcome to RavStream</h2>
+                <p style="color: #9ca3af !important; margin-bottom: ${isMobileDevice() ? '24px' : '32px'}; line-height: 1.6; -webkit-font-smoothing: antialiased; font-size: ${isMobileDevice() ? '0.9rem' : '0.95rem'};">Your journey into free IPTV begins now! You'll be redirected to the full streaming platform, but first, please verify you're a real person to prevent system abuse.</p>
+                <button onclick="closeModal()" style="padding: 12px 24px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4); min-height: 44px; font-size: 1rem; -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1); touch-action: manipulation;">Continue</button>
             `;
 
             document.body.appendChild(modal);
@@ -1249,10 +1284,13 @@
                 width: 100%;
                 height: 100%;
                 background: rgba(0, 0, 0, 0.8);
-                z-index: 9999;
+                z-index: 2147483646; /* Maximum z-index for mobile compatibility */
                 opacity: 0;
                 transition: opacity 0.3s ease;
                 -webkit-backface-visibility: hidden;
+                -webkit-transform: translateZ(0);
+                transform: translateZ(0);
+                touch-action: none;
             `;
 
             document.body.appendChild(backdrop);
@@ -1260,11 +1298,43 @@
                 backdrop.style.opacity = '1';
             }, 50);
 
+            // Store references for cleanup
+            window.currentModal = modal;
+            window.currentBackdrop = backdrop;
+
             // Remove both when clicking backdrop
-            backdrop.addEventListener('click', () => {
-                modal.remove();
-                backdrop.remove();
-            });
+            backdrop.addEventListener('click', closeModal);
+            
+            // Add touch event for mobile
+            backdrop.addEventListener('touchend', closeModal);
+        }
+
+        // Close modal function for better mobile compatibility
+        function closeModal() {
+            const modal = window.currentModal;
+            const backdrop = window.currentBackdrop;
+            
+            if (modal) {
+                modal.style.opacity = '0';
+                setTimeout(() => {
+                    if (modal.parentNode) {
+                        modal.remove();
+                    }
+                }, 300);
+            }
+            
+            if (backdrop) {
+                backdrop.style.opacity = '0';
+                setTimeout(() => {
+                    if (backdrop.parentNode) {
+                        backdrop.remove();
+                    }
+                }, 300);
+            }
+            
+            // Clear references
+            window.currentModal = null;
+            window.currentBackdrop = null;
         }
 
         // Smooth scrolling for any future anchor links - REMOVED to prevent scrolling
