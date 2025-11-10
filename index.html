@@ -759,7 +759,7 @@
             color: #e5e7eb !important;
         }
 
-        /* Contact Button Styles - ENHANCED MOBILE SUPPORT */
+        /* Contact Button Styles */
         .contact-buttons {
             display: flex;
             gap: var(--spacing-xs);
@@ -788,16 +788,11 @@
             position: relative;
             overflow: hidden;
             -webkit-tap-highlight-color: transparent;
-            /* FIXED: Better touch handling for mobile */
             touch-action: manipulation;
-            user-select: none;
-            -webkit-user-select: none;
             min-height: 44px;
             min-width: 110px;
             justify-content: center;
             flex-shrink: 0;
-            /* Ensure proper cursor behavior */
-            cursor: pointer;
         }
 
         .contact-button::before {
@@ -854,10 +849,9 @@
             width: 18px;
             height: 18px;
             filter: brightness(1.1);
-            pointer-events: none;
         }
 
-        /* Mobile Responsive for Contact Buttons - ENHANCED */
+        /* Mobile Responsive for Contact Buttons */
         @media screen and (max-width: 768px) {
             .contact-buttons {
                 gap: 8px;
@@ -866,14 +860,8 @@
             .contact-button {
                 padding: 10px 16px;
                 font-size: 0.85rem;
-                min-height: 44px;
+                min-height: 40px;
                 min-width: 100px;
-                /* Enhanced mobile touch handling */
-                touch-action: manipulation;
-                -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
-                user-select: none;
-                -webkit-user-select: none;
-                cursor: pointer;
             }
             
             .contact-button img {
@@ -886,12 +874,9 @@
             .contact-button {
                 padding: 8px 12px;
                 font-size: 0.8rem;
-                min-height: 44px; /* Minimum touch target */
+                min-height: 36px;
                 min-width: 90px;
                 border-radius: 8px;
-                /* Enhanced mobile touch feedback */
-                -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
-                touch-action: manipulation;
             }
             
             .contact-button img {
@@ -1173,7 +1158,7 @@
 
             <!-- CTA -->
             <div class="cta-container">
-                <a href="javascript:void(0)" class="cta-button" onclick="initializeStream(event)" ontouchstart="initializeStream(event)">
+                <a href="https://wa.me/+18643496340" class="cta-button" target="_blank" rel="noopener noreferrer">
                     <span class="cta-text">Start Streaming</span>
                     <svg class="cta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
@@ -1349,223 +1334,6 @@
                 });
             }
         });
-
-        // Interactive CTA - Mobile Enhanced
-        function initializeStream(event) {
-            // Prevent default behavior and event propagation
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            
-            const button = document.querySelector('.cta-button');
-            if (!button) return;
-            
-            // Mobile touch feedback with better response
-            if (isMobileDevice()) {
-                // Add visual feedback for mobile
-                button.style.transform = 'scale(0.95)';
-                button.style.transition = 'transform 0.1s ease';
-                setTimeout(() => {
-                    button.style.transform = '';
-                    button.style.transition = '';
-                }, 150);
-            } else {
-                // Desktop hover effect
-                button.style.transform = 'scale(0.98)';
-                button.style.transition = 'transform 0.1s ease';
-                setTimeout(() => {
-                    button.style.transform = '';
-                    button.style.transition = '';
-                }, 150);
-            }
-
-            // Show welcome message with slight delay for better UX
-            setTimeout(() => {
-                showWelcomeMessage();
-            }, 200);
-        }
-
-        function showWelcomeMessage() {
-            // Create a minimal modal with mobile-safe dark theme
-            const modal = document.createElement('div');
-            modal.className = 'dark-modal';
-            modal.style.cssText = `
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: #000000 !important;
-                border-radius: 16px;
-                padding: ${isMobileDevice() ? '32px' : '48px'};
-                border: 1px solid rgba(255, 255, 255, 0.15) !important;
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-                text-align: center;
-                max-width: 400px;
-                width: 90%;
-                z-index: 2147483647; /* Maximum z-index for mobile compatibility */
-                opacity: 0;
-                transition: all 0.3s ease;
-                -webkit-backface-visibility: hidden;
-                -webkit-transform: translate(-50%, -50%) translateZ(0);
-                transform: translate(-50%, -50%) translateZ(0);
-            `;
-
-            modal.innerHTML = `
-                <h2 style="font-size: ${isMobileDevice() ? '1.3rem' : '1.5rem'}; font-weight: 600; margin-bottom: 16px; color: #ffffff !important; -webkit-font-smoothing: antialiased;">Welcome to RavStream</h2>
-                <p style="color: #9ca3af !important; margin-bottom: ${isMobileDevice() ? '24px' : '32px'}; line-height: 1.6; -webkit-font-smoothing: antialiased; font-size: ${isMobileDevice() ? '0.9rem' : '0.95rem'};">Get full access to our premium, completely free IPTV. Tap Telegram or WhatsApp and we'll have you watching in minutes.</p>
-                <div class="contact-buttons">
-                    <a href="https://t.me/RavStream" class="contact-button telegram-button" target="_blank" rel="noopener noreferrer">
-                        <img src="images/telegram-icon.png" alt="Telegram" />
-                        <span>Telegram</span>
-                    </a>
-                    <a href="https://wa.me/+18643496340" class="contact-button whatsapp-button" target="_blank" rel="noopener noreferrer">
-                        <img src="images/whatsapp-icon.png" alt="WhatsApp" />
-                        <span>WhatsApp</span>
-                    </a>
-                </div>
-            `;
-
-            document.body.appendChild(modal);
-
-            // Animate in
-            setTimeout(() => {
-                modal.style.opacity = '1';
-            }, 50);
-
-            // Add backdrop with mobile-safe styling - UPDATED FOR BETTER TOUCH HANDLING
-            const backdrop = document.createElement('div');
-            backdrop.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.8);
-                z-index: 2147483646; /* Maximum z-index for mobile compatibility */
-                opacity: 0;
-                transition: opacity 0.3s ease;
-                -webkit-backface-visibility: hidden;
-                -webkit-transform: translateZ(0);
-                transform: translateZ(0);
-                touch-action: none; /* Changed to 'none' to prevent backdrop interference */
-            `;
-
-            document.body.appendChild(backdrop);
-            setTimeout(() => {
-                backdrop.style.opacity = '1';
-            }, 50);
-
-            // Store references for cleanup
-            window.currentModal = modal;
-            window.currentBackdrop = backdrop;
-
-            // FIXED: Better event handling for contact buttons on mobile
-            setupContactButtonHandlers();
-
-            // Remove both when clicking backdrop (but not when clicking buttons)
-            backdrop.addEventListener('click', function(e) {
-                if (!e.target.closest('.contact-buttons')) {
-                    closeModal();
-                }
-            });
-            
-            // Add touch event for backdrop - prevent default to avoid issues
-            backdrop.addEventListener('touchend', function(e) {
-                if (!e.target.closest('.contact-buttons')) {
-                    e.preventDefault();
-                    closeModal();
-                }
-            }, { passive: false });
-        }
-
-        // NEW: Dedicated function for contact button event handling
-        function setupContactButtonHandlers() {
-            const contactButtons = document.querySelectorAll('.contact-button');
-            
-            contactButtons.forEach(button => {
-                // Remove default behavior to prevent conflicts
-                button.addEventListener('click', function(e) {
-                    // Don't prevent default here - let the link work normally
-                    e.stopPropagation();
-                });
-                
-                // Enhanced touch handling for mobile
-                if (isMobileDevice()) {
-                    button.addEventListener('touchstart', function(e) {
-                        // Add visual feedback
-                        this.style.transform = 'scale(0.95)';
-                        this.style.transition = 'transform 0.1s ease';
-                    });
-                    
-                    button.addEventListener('touchend', function(e) {
-                        // Let the default behavior happen (navigation) but clean up the visual
-                        setTimeout(() => {
-                            this.style.transform = '';
-                            this.style.transition = '';
-                        }, 150);
-                    });
-                    
-                    button.addEventListener('touchcancel', function(e) {
-                        // Clean up visual state if touch is cancelled
-                        this.style.transform = '';
-                        this.style.transition = '';
-                    });
-                }
-                
-                // Add regular click handler for desktop
-                button.addEventListener('mouseenter', function() {
-                    if (!isMobileDevice()) {
-                        this.style.transform = 'translateY(-2px) scale(1.02)';
-                    }
-                });
-                
-                button.addEventListener('mouseleave', function() {
-                    if (!isMobileDevice()) {
-                        this.style.transform = '';
-                    }
-                });
-            });
-        }
-
-        // Close modal function for better mobile compatibility
-        function closeModal() {
-            const modal = window.currentModal;
-            const backdrop = window.currentBackdrop;
-            
-            if (modal) {
-                modal.style.opacity = '0';
-                setTimeout(() => {
-                    if (modal.parentNode) {
-                        modal.remove();
-                    }
-                }, 300);
-            }
-            
-            if (backdrop) {
-                backdrop.style.opacity = '0';
-                setTimeout(() => {
-                    if (backdrop.parentNode) {
-                        backdrop.remove();
-                    }
-                }, 300);
-            }
-            
-            // Clear references
-            window.currentModal = null;
-            window.currentBackdrop = null;
-        }
-
-        // Smooth scrolling for any future anchor links - REMOVED to prevent scrolling
-        // document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        //     anchor.addEventListener('click', function (e) {
-        //         e.preventDefault();
-        //         document.querySelector(this.getAttribute('href')).scrollIntoView({
-        //             behavior: 'smooth',
-        //             block: 'start'
-        //         });
-        //     });
-        // });
 
         // Preload critical images
         const criticalImages = [
