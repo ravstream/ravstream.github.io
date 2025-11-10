@@ -759,7 +759,7 @@
             color: #e5e7eb !important;
         }
 
-        /* Contact Button Styles */
+        /* Contact Button Styles - ENHANCED MOBILE SUPPORT */
         .contact-buttons {
             display: flex;
             gap: var(--spacing-xs);
@@ -788,11 +788,16 @@
             position: relative;
             overflow: hidden;
             -webkit-tap-highlight-color: transparent;
+            /* FIXED: Better touch handling for mobile */
             touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
             min-height: 44px;
             min-width: 110px;
             justify-content: center;
             flex-shrink: 0;
+            /* Ensure proper cursor behavior */
+            cursor: pointer;
         }
 
         .contact-button::before {
@@ -849,9 +854,10 @@
             width: 18px;
             height: 18px;
             filter: brightness(1.1);
+            pointer-events: none;
         }
 
-        /* Mobile Responsive for Contact Buttons */
+        /* Mobile Responsive for Contact Buttons - ENHANCED */
         @media screen and (max-width: 768px) {
             .contact-buttons {
                 gap: 8px;
@@ -860,8 +866,14 @@
             .contact-button {
                 padding: 10px 16px;
                 font-size: 0.85rem;
-                min-height: 40px;
+                min-height: 44px;
                 min-width: 100px;
+                /* Enhanced mobile touch handling */
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+                user-select: none;
+                -webkit-user-select: none;
+                cursor: pointer;
             }
             
             .contact-button img {
@@ -874,9 +886,12 @@
             .contact-button {
                 padding: 8px 12px;
                 font-size: 0.8rem;
-                min-height: 36px;
+                min-height: 44px; /* Minimum touch target */
                 min-width: 90px;
                 border-radius: 8px;
+                /* Enhanced mobile touch feedback */
+                -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+                touch-action: manipulation;
             }
             
             .contact-button img {
@@ -1418,7 +1433,7 @@
                 modal.style.opacity = '1';
             }, 50);
 
-            // Add backdrop with mobile-safe styling
+            // Add backdrop with mobile-safe styling - UPDATED FOR BETTER TOUCH HANDLING
             const backdrop = document.createElement('div');
             backdrop.style.cssText = `
                 position: fixed;
@@ -1433,7 +1448,7 @@
                 -webkit-backface-visibility: hidden;
                 -webkit-transform: translateZ(0);
                 transform: translateZ(0);
-                touch-action: manipulation; /* Changed from 'none' to 'manipulation' */
+                touch-action: none; /* Changed to 'none' to prevent backdrop interference */
             `;
 
             document.body.appendChild(backdrop);
@@ -1445,14 +1460,72 @@
             window.currentModal = modal;
             window.currentBackdrop = backdrop;
 
-            // Remove both when clicking backdrop
-            backdrop.addEventListener('click', closeModal);
+            // FIXED: Better event handling for contact buttons on mobile
+            setupContactButtonHandlers();
+
+            // Remove both when clicking backdrop (but not when clicking buttons)
+            backdrop.addEventListener('click', function(e) {
+                if (!e.target.closest('.contact-buttons')) {
+                    closeModal();
+                }
+            });
             
-            // Add touch event for mobile - prevent default to avoid issues
+            // Add touch event for backdrop - prevent default to avoid issues
             backdrop.addEventListener('touchend', function(e) {
-                e.preventDefault();
-                closeModal();
+                if (!e.target.closest('.contact-buttons')) {
+                    e.preventDefault();
+                    closeModal();
+                }
             }, { passive: false });
+        }
+
+        // NEW: Dedicated function for contact button event handling
+        function setupContactButtonHandlers() {
+            const contactButtons = document.querySelectorAll('.contact-button');
+            
+            contactButtons.forEach(button => {
+                // Remove default behavior to prevent conflicts
+                button.addEventListener('click', function(e) {
+                    // Don't prevent default here - let the link work normally
+                    e.stopPropagation();
+                });
+                
+                // Enhanced touch handling for mobile
+                if (isMobileDevice()) {
+                    button.addEventListener('touchstart', function(e) {
+                        // Add visual feedback
+                        this.style.transform = 'scale(0.95)';
+                        this.style.transition = 'transform 0.1s ease';
+                    });
+                    
+                    button.addEventListener('touchend', function(e) {
+                        // Let the default behavior happen (navigation) but clean up the visual
+                        setTimeout(() => {
+                            this.style.transform = '';
+                            this.style.transition = '';
+                        }, 150);
+                    });
+                    
+                    button.addEventListener('touchcancel', function(e) {
+                        // Clean up visual state if touch is cancelled
+                        this.style.transform = '';
+                        this.style.transition = '';
+                    });
+                }
+                
+                // Add regular click handler for desktop
+                button.addEventListener('mouseenter', function() {
+                    if (!isMobileDevice()) {
+                        this.style.transform = 'translateY(-2px) scale(1.02)';
+                    }
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    if (!isMobileDevice()) {
+                        this.style.transform = '';
+                    }
+                });
+            });
         }
 
         // Close modal function for better mobile compatibility
