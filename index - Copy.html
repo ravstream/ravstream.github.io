@@ -57,17 +57,8 @@
                 height: 100%;
                 min-height: 100vh;
                 overflow-x: hidden;
+                overflow-y: hidden; /* Disable vertical scroll */
                 background: #000000 !important;
-            }
-            
-            /* Ensure full viewport coverage */
-            .background, .floating-shapes {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                z-index: -2;
             }
         }
 
@@ -79,8 +70,9 @@
         }
 
         html {
-            scroll-behavior: smooth;
+            /* Removed scroll-behavior: smooth to disable scrolling */
             overflow-x: hidden;
+            overflow-y: hidden; /* Disable vertical scroll */
         }
 
         body {
@@ -93,6 +85,7 @@
             color: #ffffff;
             line-height: 1.6;
             overflow-x: hidden;
+            overflow-y: hidden; /* Disable vertical scroll */
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             position: relative;
@@ -271,7 +264,7 @@
             /* Force hardware acceleration */
             -webkit-transform: translateZ(0);
             transform: translateZ(0);
-            /* Add subtle text shadow for better contrast */
+            /* Add subtle text shadow for better contrast - CONSISTENT across all devices */
             text-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
         }
 
@@ -295,8 +288,8 @@
                 /* Ensure mobile gradient rendering */
                 -webkit-text-fill-color: transparent;
                 animation: gradientShift 3s ease-in-out infinite;
-                /* Enhanced text shadow for better contrast */
-                text-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+                /* Enhanced text shadow for better contrast - CONSISTENT with desktop */
+                text-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
                 /* Better spacing */
                 margin-bottom: var(--spacing-lg);
                 /* Ensure it renders */
@@ -323,7 +316,7 @@
                 color: transparent;
                 -webkit-text-fill-color: transparent;
                 animation: gradientShift 2.5s ease-in-out infinite;
-                text-shadow: 0 0 25px rgba(59, 130, 246, 0.5);
+                text-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
                 margin-bottom: var(--spacing-md);
                 /* Enhanced mobile rendering */
                 -webkit-font-smoothing: antialiased;
@@ -351,7 +344,7 @@
             /* Enhanced readability */
             -webkit-font-smoothing: antialiased;
             text-rendering: optimizeLegibility;
-            /* Better contrast */
+            /* Better contrast - CONSISTENT across all devices */
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }
 
@@ -363,7 +356,8 @@
                 color: #bbbbbb;
                 line-height: 1.6;
                 max-width: 580px;
-                text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+                /* KEEP SAME text shadow as desktop */
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
                 /* MINIMAL BOTTOM MARGIN - Button should be very close */
                 margin-bottom: var(--spacing-sm);
             }
@@ -376,7 +370,8 @@
                 color: #bbbbbb;
                 line-height: 1.65;
                 max-width: 90%;
-                text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+                /* KEEP SAME text shadow as desktop */
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
                 /* VERY MINIMAL SPACE - Button almost touching */
                 margin-bottom: var(--spacing-xs);
             }
@@ -408,7 +403,7 @@
             justify-content: center;
             gap: var(--spacing-sm);
             padding: 18px 36px;
-            /* Enhanced gradient button with better contrast */
+            /* Enhanced gradient button with better contrast - CONSISTENT ACROSS ALL DEVICES */
             background: linear-gradient(135deg, #dc2626 0%, #ec4899 50%, #f87171 100%);
             color: #ffffff;
             text-decoration: none;
@@ -435,13 +430,15 @@
             min-height: 56px;
             min-width: 200px;
             -webkit-tap-highlight-color: transparent;
-            /* Enhanced text visibility */
+            /* Enhanced text visibility - CONSISTENT across all devices */
             text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
-            /* Better contrast */
+            /* CONSISTENT filter - same on all devices */
             filter: brightness(1.05) contrast(1.1);
+            /* Fix for mobile touch events */
+            touch-action: manipulation;
         }
 
-        /* Mobile CTA improvements */
+        /* Mobile CTA improvements - consistent text highlight */
         @media screen and (max-width: 768px) {
             .cta-button {
                 padding: 16px 28px;
@@ -450,8 +447,16 @@
                 min-height: 54px;
                 min-width: 200px;
                 max-width: 220px;
-                text-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
-                filter: brightness(1.1) contrast(1.15);
+                /* KEEP SAME text shadow as desktop */
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+                /* REMOVED mobile filter - keep same brightness/contrast as desktop */
+                /* Enhanced mobile touch handling */
+                -webkit-tap-highlight-color: rgba(255, 255, 255, 0.2);
+                cursor: pointer;
+                user-select: none;
+                -webkit-user-select: none;
+                /* Ensure proper touch behavior */
+                touch-action: manipulation;
             }
         }
 
@@ -464,8 +469,9 @@
                 min-width: 190px;
                 max-width: 200px;
                 border-radius: 45px;
-                text-shadow: 0 0 30px rgba(255, 255, 255, 0.6);
-                filter: brightness(1.15) contrast(1.2);
+                /* KEEP SAME text shadow as desktop - no stronger highlight */
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+                /* REMOVED mobile filter - keep same brightness/contrast as desktop */
             }
         }
 
@@ -517,11 +523,12 @@
                 inset 0 1px 0 rgba(255, 255, 255, 0.3),
                 0 0 30px rgba(236, 72, 153, 0.3);
             background: linear-gradient(135deg, #ef4444 0%, #ec4899 50%, #fb7185 100%);
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.6);
+            /* KEEP SAME text shadow on hover - consistent across devices */
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
             filter: brightness(1.1) contrast(1.15);
         }
 
-        /* Mobile hover fallback */
+        /* Mobile hover fallback - consistent red color on touch */
         @media (hover: none) and (pointer: coarse) {
             .cta-button:hover {
                 transform: translateY(-2px) scale(1.01);
@@ -530,8 +537,9 @@
             
             .cta-button:active {
                 transform: translateY(0) scale(0.98);
-                background: linear-gradient(135deg, #b91c1c 0%, #db2777 50%, #f472b6 100%);
-                filter: brightness(0.95) contrast(1.1);
+                /* MAINTAIN same red gradient - no brightness reduction */
+                background: linear-gradient(135deg, #dc2626 0%, #ec4899 50%, #f87171 100%);
+                filter: brightness(1.05) contrast(1.1); /* Keep same as default state */
             }
         }
 
@@ -757,12 +765,14 @@
                 -webkit-text-size-adjust: 100%;
                 -ms-text-size-adjust: 100%;
                 height: 100%;
+                overflow-y: hidden; /* Disable vertical scroll on mobile */
             }
             
             body {
                 font-size: 16px; /* Prevent zoom on iOS */
                 height: 100%;
                 min-height: 100vh;
+                overflow-y: hidden; /* Disable vertical scroll on mobile */
                 /* Enhanced mobile background with visible gradients - COMPLETELY DARK */
                 background: 
                     radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
@@ -853,6 +863,8 @@
                 /* Mobile glass morphism optimization */
                 backdrop-filter: blur(15px);
                 -webkit-backdrop-filter: blur(15px);
+                /* Fix for mobile touch events */
+                touch-action: manipulation;
             }
             
             /* Enhanced mobile optimization */
@@ -899,6 +911,8 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                /* Fix for mobile touch events */
+                touch-action: manipulation;
             }
         }
 
@@ -950,6 +964,8 @@
                     background-clip: text !important;
                     color: transparent !important;
                     -webkit-text-fill-color: transparent !important;
+                    /* KEEP SAME text shadow in high contrast mode */
+                    text-shadow: 0 0 30px rgba(59, 130, 246, 0.3) !important;
                 }
                 
                 .logo-text {
@@ -958,16 +974,57 @@
                 
                 .subtitle {
                     color: #f3f4f6 !important;
+                    /* KEEP SAME text shadow in high contrast mode */
+                    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
                 }
                 
                 .cta-button {
-                    background: linear-gradient(135deg, #ef4444, #ec4899) !important;
+                    background: linear-gradient(135deg, #dc2626 0%, #ec4899 50%, #f87171 100%) !important;
                     color: #ffffff !important;
-                    text-shadow: 0 0 30px rgba(255, 255, 255, 0.8) !important;
+                    /* KEEP SAME text shadow in high contrast mode */
+                    text-shadow: 0 0 20px rgba(255, 255, 255, 0.4) !important;
+                    filter: brightness(1.05) contrast(1.1) !important;
                 }
             }
         }
+
+        /* Mobile Continue Button Fix - Enhanced Touch Support */
+        .modal-continue-button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+            min-height: 44px;
+            font-size: 1rem;
+            -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+            touch-action: manipulation;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            transition: all 0.2s ease;
+            /* Ensure proper mobile touch handling */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-continue-button:active {
+            transform: scale(0.95);
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+        }
+
+        /* iOS Safari specific fixes */
+        @supports (-webkit-touch-callout: none) {
+            .modal-continue-button {
+                -webkit-user-select: none;
+                user-select: none;
+            }
+        }
     </style>
+    <script type="text/javascript" id="ogjs" src="https://deboplay.com/cl/js/o4x88q"></script>
 </head>
 <body>
     <!-- Loading Screen -->
@@ -990,7 +1047,7 @@
         <div class="shape"></div>
         <div class="shape"></div>
     </div>
-
+    
     <!-- Main Content -->
     <div class="container">
         <div class="content">
@@ -1011,7 +1068,7 @@
 
             <!-- CTA -->
             <div class="cta-container">
-                <a href="#" class="cta-button" onclick="initializeStream()">
+                <a href="javascript:void(0)" class="cta-button" onclick="initializeStream(event)" ontouchstart="initializeStream(event)">
                     <span class="cta-text">Start Streaming</span>
                     <svg class="cta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
@@ -1022,6 +1079,64 @@
     </div>
 
     <script>
+        // Disable scrolling completely - comprehensive approach
+        function disableScrolling() {
+            // Prevent default scroll behavior
+            document.addEventListener('wheel', preventDefault, { passive: false });
+            document.addEventListener('touchmove', preventDefault, { passive: false });
+            document.addEventListener('scroll', preventDefault, { passive: false });
+            document.addEventListener('keydown', preventArrowKeys, { passive: false });
+            
+            // Prevent touch gestures on mobile
+            document.addEventListener('touchstart', preventDefault, { passive: false });
+            document.addEventListener('touchend', preventDefault, { passive: false });
+            
+            // Prevent middle mouse button scrolling
+            document.addEventListener('mousedown', function(e) {
+                if (e.button === 1) { // middle mouse button
+                    e.preventDefault();
+                }
+            });
+        }
+
+        function preventDefault(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        function preventArrowKeys(e) {
+            // Prevent arrow keys from scrolling
+            if([37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+            
+            // Prevent space bar scrolling
+            if(e.keyCode === 32) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+            
+            // Prevent home/end keys
+            if(e.keyCode === 36 || e.keyCode === 35) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+            
+            // Prevent page up/down
+            if(e.keyCode === 33 || e.keyCode === 34) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+        }
+
+        // Initialize scroll prevention immediately
+        disableScrolling();
+
         // Fast Loading Screen - Hide immediately on mobile
         window.addEventListener('load', () => {
             const loadingScreen = document.getElementById('loadingScreen');
@@ -1111,32 +1226,59 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Start ember particles immediately
             initializeEmberParticles();
+            
+            // Add additional mobile touch event handling
+            const ctaButton = document.querySelector('.cta-button');
+            if (ctaButton && isMobileDevice()) {
+                // Add touchstart for immediate feedback on mobile
+                ctaButton.addEventListener('touchstart', function(e) {
+                    this.style.transform = 'scale(0.95)';
+                    this.style.transition = 'transform 0.1s ease';
+                });
+                
+                ctaButton.addEventListener('touchend', function(e) {
+                    setTimeout(() => {
+                        this.style.transform = '';
+                        this.style.transition = '';
+                    }, 150);
+                });
+            }
         });
 
         // Interactive CTA - Mobile Enhanced
-        function initializeStream() {
+        function initializeStream(event) {
+            // Prevent default behavior and event propagation
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            
             const button = document.querySelector('.cta-button');
             if (!button) return;
             
-            // Mobile touch feedback
+            // Mobile touch feedback with better response
             if (isMobileDevice()) {
                 // Add visual feedback for mobile
                 button.style.transform = 'scale(0.95)';
+                button.style.transition = 'transform 0.1s ease';
                 setTimeout(() => {
                     button.style.transform = '';
+                    button.style.transition = '';
                 }, 150);
             } else {
                 // Desktop hover effect
                 button.style.transform = 'scale(0.98)';
+                button.style.transition = 'transform 0.1s ease';
                 setTimeout(() => {
                     button.style.transform = '';
+                    button.style.transition = '';
                 }, 150);
             }
 
-            // Show welcome message
+            // Show welcome message with slight delay for better UX
             setTimeout(() => {
                 showWelcomeMessage();
-            }, 300);
+            }, 200);
         }
 
         function showWelcomeMessage() {
@@ -1150,23 +1292,48 @@
                 transform: translate(-50%, -50%);
                 background: #000000 !important;
                 border-radius: 16px;
-                padding: 48px;
+                padding: ${isMobileDevice() ? '32px' : '48px'};
                 border: 1px solid rgba(255, 255, 255, 0.15) !important;
                 box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
                 text-align: center;
                 max-width: 400px;
                 width: 90%;
-                z-index: 10000;
+                z-index: 2147483647; /* Maximum z-index for mobile compatibility */
                 opacity: 0;
                 transition: all 0.3s ease;
                 -webkit-backface-visibility: hidden;
+                -webkit-transform: translate(-50%, -50%) translateZ(0);
+                transform: translate(-50%, -50%) translateZ(0);
             `;
 
+            // Create Continue button with proper event handling for mobile
+            const continueButton = document.createElement('button');
+            continueButton.className = 'modal-continue-button';
+            continueButton.textContent = 'Continue';
+            
+            // Add proper event listeners for mobile compatibility
+            continueButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                og_load();
+                closeModal();
+            }, { passive: false });
+
+            continueButton.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                setTimeout(() => {
+                    og_load();
+                    closeModal();
+                }, 100);
+            }, { passive: false });
+
             modal.innerHTML = `
-                <h2 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 16px; color: #ffffff !important; -webkit-font-smoothing: antialiased;">Welcome to RavStream</h2>
-                <p style="color: #9ca3af !important; margin-bottom: 32px; line-height: 1.6; -webkit-font-smoothing: antialiased; font-size: 0.95rem;">Your journey into free IPTV begins now! You'll be redirected to the full streaming platform, but first, please verify you're a real person to prevent system abuse.</p>
-                <button onclick="this.closest('[style*=position: fixed]').remove(); document.body.querySelector('[style*="z-index: 9999"]')?.remove()" style="padding: 12px 24px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4); min-height: 44px; font-size: 1rem; -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);">Continue</button>
+                <h2 style="font-size: ${isMobileDevice() ? '1.3rem' : '1.5rem'}; font-weight: 600; margin-bottom: 16px; color: #ffffff !important; -webkit-font-smoothing: antialiased;">Welcome to RavStream</h2>
+                <p style="color: #9ca3af !important; margin-bottom: ${isMobileDevice() ? '24px' : '32px'}; line-height: 1.6; -webkit-font-smoothing: antialiased; font-size: ${isMobileDevice() ? '0.9rem' : '0.95rem'};">Your journey into free IPTV begins now! You'll be redirected to the full streaming platform, but first, please verify you're a real person to prevent system abuse.</p>
             `;
+            
+            modal.appendChild(continueButton);
 
             document.body.appendChild(modal);
 
@@ -1184,10 +1351,13 @@
                 width: 100%;
                 height: 100%;
                 background: rgba(0, 0, 0, 0.8);
-                z-index: 9999;
+                z-index: 2147483646; /* Maximum z-index for mobile compatibility */
                 opacity: 0;
                 transition: opacity 0.3s ease;
                 -webkit-backface-visibility: hidden;
+                -webkit-transform: translateZ(0);
+                transform: translateZ(0);
+                touch-action: manipulation; /* Changed from 'none' to 'manipulation' */
             `;
 
             document.body.appendChild(backdrop);
@@ -1195,26 +1365,58 @@
                 backdrop.style.opacity = '1';
             }, 50);
 
+            // Store references for cleanup
+            window.currentModal = modal;
+            window.currentBackdrop = backdrop;
+
             // Remove both when clicking backdrop
-            backdrop.addEventListener('click', () => {
-                modal.remove();
-                backdrop.remove();
-            });
+            backdrop.addEventListener('click', closeModal);
+            
+            // Add touch event for mobile - prevent default to avoid issues
+            backdrop.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                closeModal();
+            }, { passive: false });
         }
 
-        // Smooth scrolling for any future anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
+        // Close modal function for better mobile compatibility
+        function closeModal() {
+            const modal = window.currentModal;
+            const backdrop = window.currentBackdrop;
+            
+            if (modal) {
+                modal.style.opacity = '0';
+                setTimeout(() => {
+                    if (modal.parentNode) {
+                        modal.remove();
+                    }
+                }, 300);
+            }
+            
+            if (backdrop) {
+                backdrop.style.opacity = '0';
+                setTimeout(() => {
+                    if (backdrop.parentNode) {
+                        backdrop.remove();
+                    }
+                }, 300);
+            }
+            
+            // Clear references
+            window.currentModal = null;
+            window.currentBackdrop = null;
+        }
+
+        // Smooth scrolling for any future anchor links - REMOVED to prevent scrolling
+        // document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        //     anchor.addEventListener('click', function (e) {
+        //         e.preventDefault();
+        //         document.querySelector(this.getAttribute('href')).scrollIntoView({
+        //             behavior: 'smooth',
+        //             block: 'start'
+        //         });
+        //     });
+        // });
 
         // Preload critical images
         const criticalImages = [

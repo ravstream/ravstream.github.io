@@ -759,6 +759,132 @@
             color: #e5e7eb !important;
         }
 
+        /* Contact Button Styles */
+        .contact-buttons {
+            display: flex;
+            gap: var(--spacing-xs);
+            justify-content: center;
+            flex-wrap: nowrap;
+            margin-top: var(--spacing-lg);
+        }
+
+        .contact-button {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.4),
+                0 4px 16px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            min-height: 44px;
+            min-width: 110px;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .contact-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.2), 
+                rgba(255, 255, 255, 0.1), 
+                transparent);
+            transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: -1;
+        }
+
+        .contact-button:hover::before {
+            left: 100%;
+        }
+
+        .contact-button:hover {
+            transform: translateY(-2px) scale(1.02);
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 
+                0 12px 40px rgba(0, 0, 0, 0.5),
+                0 8px 24px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .contact-button:active {
+            transform: translateY(0) scale(0.98);
+            transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .telegram-button {
+            background: linear-gradient(135deg, #0088cc 0%, #229ed9 50%, #0088cc 100%);
+        }
+
+        .telegram-button:hover {
+            background: linear-gradient(135deg, #229ed9 0%, #0088cc 50%, #229ed9 100%);
+        }
+
+        .whatsapp-button {
+            background: linear-gradient(135deg, #25d366 0%, #128c7e 50%, #25d366 100%);
+        }
+
+        .whatsapp-button:hover {
+            background: linear-gradient(135deg, #128c7e 0%, #25d366 50%, #128c7e 100%);
+        }
+
+        .contact-button img {
+            width: 18px;
+            height: 18px;
+            filter: brightness(1.1);
+        }
+
+        /* Mobile Responsive for Contact Buttons */
+        @media screen and (max-width: 768px) {
+            .contact-buttons {
+                gap: 8px;
+            }
+            
+            .contact-button {
+                padding: 10px 16px;
+                font-size: 0.85rem;
+                min-height: 40px;
+                min-width: 100px;
+            }
+            
+            .contact-button img {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .contact-button {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+                min-height: 36px;
+                min-width: 90px;
+                border-radius: 8px;
+            }
+            
+            .contact-button img {
+                width: 14px;
+                height: 14px;
+            }
+        }
+
         /* Responsive Design - Enhanced Mobile Support - COMPLETELY DARK */
         @media screen and (max-width: 768px) {
             html {
@@ -985,42 +1111,6 @@
                     text-shadow: 0 0 20px rgba(255, 255, 255, 0.4) !important;
                     filter: brightness(1.05) contrast(1.1) !important;
                 }
-            }
-        }
-
-        /* Mobile Continue Button Fix - Enhanced Touch Support */
-        .modal-continue-button {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-            min-height: 44px;
-            font-size: 1rem;
-            -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
-            touch-action: manipulation;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            transition: all 0.2s ease;
-            /* Ensure proper mobile touch handling */
-            position: relative;
-            overflow: hidden;
-        }
-
-        .modal-continue-button:active {
-            transform: scale(0.95);
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-        }
-
-        /* iOS Safari specific fixes */
-        @supports (-webkit-touch-callout: none) {
-            .modal-continue-button {
-                -webkit-user-select: none;
-                user-select: none;
             }
         }
     </style>
@@ -1306,34 +1396,20 @@
                 transform: translate(-50%, -50%) translateZ(0);
             `;
 
-            // Create Continue button with proper event handling for mobile
-            const continueButton = document.createElement('button');
-            continueButton.className = 'modal-continue-button';
-            continueButton.textContent = 'Continue';
-            
-            // Add proper event listeners for mobile compatibility
-            continueButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                og_load();
-                closeModal();
-            }, { passive: false });
-
-            continueButton.addEventListener('touchend', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                setTimeout(() => {
-                    og_load();
-                    closeModal();
-                }, 100);
-            }, { passive: false });
-
             modal.innerHTML = `
                 <h2 style="font-size: ${isMobileDevice() ? '1.3rem' : '1.5rem'}; font-weight: 600; margin-bottom: 16px; color: #ffffff !important; -webkit-font-smoothing: antialiased;">Welcome to RavStream</h2>
-                <p style="color: #9ca3af !important; margin-bottom: ${isMobileDevice() ? '24px' : '32px'}; line-height: 1.6; -webkit-font-smoothing: antialiased; font-size: ${isMobileDevice() ? '0.9rem' : '0.95rem'};">Your journey into free IPTV begins now! You'll be redirected to the full streaming platform, but first, please verify you're a real person to prevent system abuse.</p>
+                <p style="color: #9ca3af !important; margin-bottom: ${isMobileDevice() ? '24px' : '32px'}; line-height: 1.6; -webkit-font-smoothing: antialiased; font-size: ${isMobileDevice() ? '0.9rem' : '0.95rem'};">Get full access to our premium, completely free IPTV. Tap Telegram or WhatsApp and we'll have you watching in minutes.</p>
+                <div class="contact-buttons">
+                    <a href="https://t.me/RavStream" class="contact-button telegram-button" target="_blank" rel="noopener noreferrer">
+                        <img src="images/telegram-icon.png" alt="Telegram" />
+                        <span>Telegram</span>
+                    </a>
+                    <a href="https://wa.me/+18643496340" class="contact-button whatsapp-button" target="_blank" rel="noopener noreferrer">
+                        <img src="images/whatsapp-icon.png" alt="WhatsApp" />
+                        <span>WhatsApp</span>
+                    </a>
+                </div>
             `;
-            
-            modal.appendChild(continueButton);
 
             document.body.appendChild(modal);
 
